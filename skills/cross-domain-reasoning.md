@@ -318,7 +318,7 @@ Gen Alpha (<13): 影响父母消费/教育科技 → RBLX, DUOL
 
 ---
 
-### 8. 地缘政治 (Geopolitics) ⭐ 关键学科
+### 8. 地缘政治 (Geopolitics) [关键学科]
 
 **地缘风险 → 金融传导路径**
 
@@ -387,7 +387,7 @@ Regulatory shift:
 
 ---
 
-### 9. 供应链科学 (Supply Chain) ⭐ 关键学科
+### 9. 供应链科学 (Supply Chain) [关键学科]
 
 **全球关键供应链拓扑（美股视角）**
 
@@ -482,7 +482,7 @@ Inventory Cycle (库存周期):
 
 ---
 
-### 10. 市场传导机制 (Market Mechanics) ⭐ "最后一英里"
+### 10. 市场传导机制 (Market Mechanics) [最后一英里]
 
 **事件如何最终变成股价变动？**
 

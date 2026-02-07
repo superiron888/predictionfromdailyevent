@@ -3,34 +3,39 @@
 /**
  * Mr.IF — 蝴蝶效应金融推理 MCP Server
  * 
- * 从日常事件出发，通过多学科因果推理链，
- * 推导美股市场影响，给出投资洞察建议。
- * 
- * 8个工具：5个推理工具（本项目新建）+ 3个已有工具（股票映射/网络检索/取数）
+ * 1个核心推理工具（mr_if_reason）
+ * + 外部已有工具（行业映射/证券映射/取数/网络检索等）
  */
 
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import { readFileSync } from "fs";
+import { join, dirname } from "path";
+import { fileURLToPath } from "url";
 
-import { registerButterflyAnalyze } from "./tools/butterfly-analyze.js";
-import { registerCausalChainBuilder } from "./tools/causal-chain-builder.js";
-import { registerChainValidator } from "./tools/chain-validator.js";
+import { registerMrIfReason } from "./tools/mr-if-reason.js";
 
-import { registerHistoricalEcho } from "./tools/historical-echo.js";
-import { registerChainConfluence } from "./tools/chain-confluence.js";
+// Resolve project root for reading skill files
+const __filename_resolved = fileURLToPath(import.meta.url);
+const __dirname_resolved = dirname(__filename_resolved);
+const PROJECT_ROOT = join(__dirname_resolved, "..");
+
+function readSkill(filename: string): string {
+  try {
+    return readFileSync(join(PROJECT_ROOT, "skills", filename), "utf-8");
+  } catch {
+    return `[Error: Could not read ${filename}]`;
+  }
+}
 
 const server = new McpServer({
   name: "mr-if",
-  version: "1.0.0",
+  version: "2.0.0",
   description: "Mr.IF — 蝴蝶效应金融推理 Agent 工具包（美股）",
 });
 
-// ====== 注册5个推理工具 ======
-registerButterflyAnalyze(server);      // 输入解析 → 事件分类 + 推理方向
-registerCausalChainBuilder(server);     // 因果链构建 → 模板匹配 + 指引
-registerChainValidator(server);         // 链条验证 → 多维度打分
-registerHistoricalEcho(server);         // 历史先例 → 蝴蝶效应案例库
-registerChainConfluence(server);        // 多链汇合 → 收敛/矛盾分析
+// ====== 注册唯一的推理工具 ======
+registerMrIfReason(server);
 
 // ====== 注册 Prompt ======
 server.prompt(
@@ -49,7 +54,7 @@ server.prompt(
   })
 );
 
-// ====== 注册 Resources (Skills as MCP Resources) ======
+// ====== 注册 Resources (Skills — 读取实际文件内容) ======
 server.resource(
   "skill-butterfly-effect",
   "skill://butterfly-effect-chain",
@@ -58,7 +63,7 @@ server.resource(
       {
         uri: uri.href,
         mimeType: "text/markdown",
-        text: "蝴蝶效应因果推理链 Skill — 详见 skills/butterfly-effect-chain.md",
+        text: readSkill("butterfly-effect-chain.md"),
       },
     ],
   })
@@ -72,7 +77,35 @@ server.resource(
       {
         uri: uri.href,
         mimeType: "text/markdown",
-        text: "跨学科推理引擎 Skill — 详见 skills/cross-domain-reasoning.md",
+        text: readSkill("cross-domain-reasoning.md"),
+      },
+    ],
+  })
+);
+
+server.resource(
+  "skill-second-order",
+  "skill://second-order-thinking",
+  async (uri) => ({
+    contents: [
+      {
+        uri: uri.href,
+        mimeType: "text/markdown",
+        text: readSkill("second-order-thinking.md"),
+      },
+    ],
+  })
+);
+
+server.resource(
+  "skill-reasoning-discipline",
+  "skill://reasoning-discipline",
+  async (uri) => ({
+    contents: [
+      {
+        uri: uri.href,
+        mimeType: "text/markdown",
+        text: readSkill("reasoning-discipline.md"),
       },
     ],
   })
@@ -82,7 +115,7 @@ server.resource(
 async function main() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
-  console.error("Mr.IF MCP Server started 🦋");
+  console.error("Mr.IF MCP Server v2 started 🦋");
 }
 
 main().catch((error) => {
@@ -91,28 +124,32 @@ main().catch((error) => {
 });
 
 // ====== 精简版系统提示词（嵌入MCP Prompt） ======
-const SYSTEM_PROMPT = `You are Mr.IF, a sharp financial advisor who sees connections others miss.
+const SYSTEM_PROMPT = `You are Mr.IF, a butterfly-effect financial reasoning agent for US stocks.
 
-You trace daily events through multi-disciplinary cause-and-effect chains to find US stock opportunities.
-Scope: US domestic + global events → US equities (NYSE/NASDAQ) only.
+CRITICAL: You are a FINANCIAL advisor. No matter what the user says ("今天降温了", "我打了个喷嚏"), ALWAYS interpret it as: what US stocks should I watch? Never answer literally. Never suggest buying clothes or medicine.
 
-VOICE: Talk like a trusted RIA sitting across the table from a smart client. Confident, conversational, specific. Never academic. Never narrate your tool usage or internal process.
+VOICE: Talk like a trusted RIA. Confident, conversational, specific. Never narrate tool usage.
 
-YOUR 8 TOOLS (use silently, never mention tool names to user):
-1. butterfly_analyze → classify event + reasoning directions
-2. causal_chain_build → reasoning templates
-3. chain_validate → score chains internally
-4. historical_echo → find precedents
-5. chain_confluence → converge/conflict analysis
-6. 股票映射工具 → map conclusions to specific US tickers/ETFs
-7. 网络检索工具 → verify assumptions, search news/history
-8. 取数工具 → pull real-time price/chart data
+WORKFLOW (strict order):
+Step 1 [MANDATORY FIRST]: mr_if_reason(user_input) — returns event classification, chain templates, historical cases, validation framework, all in one call.
+Step 2 [MANDATORY - 7 GATES in your thinking]: Follow reasoning-discipline protocol:
+  Gate 1: 事件锚定 (financial interpretation)
+  Gate 2: 链条构建 (build 3+ chains from templates, each step needs discipline + "because...")
+  Gate 3: 链条验证 (score honestly, drop weak chains)
+  Gate 4: 历史对照 (compare with returned cases)
+  Gate 5: 汇合分析 (convergence/conflict)
+  Gate 6: 二阶检测 (consensus check, hidden winners/losers)
+  Gate 7: 出口检查 (10-point quality gate - ALL must pass)
+  Anti-hallucination: don't reverse-engineer, don't invent theories, be honest about weak links.
+Step 3: 行业映射工具 → 证券映射工具 → 取数工具 (ONLY after Gate 7 passes)
+Step 4 [CONDITIONAL]: 网络检索工具, 贪婪先生数据获取工具, dcf计算工具, 证券选择工具, rating_filter, top_gainers/top_losers, volume_breakout_scanner, 基于历史的股票收益预测器, 蒙特卡洛预测, 折线图工具
+Step 5: Synthesize into natural RIA-style response.
+
+NEVER skip Steps 1-2. NEVER call external tools before completing Gate 7.
 
 RULES:
-- Build 3+ chains internally, apply second-order thinking, then distill into clear insights
 - Never show chain notation, scores, or tool names to user
-- ALWAYS end with a consolidated ticker summary table (Ticker | Why | Direction | Time | Conviction) + Key Catalysts
-- Include both bullish AND bearish names when applicable
+- ALWAYS end with ticker summary table (Ticker | Why | Direction | Time | Conviction) + Key Catalysts
+- Include both bullish AND bearish names
 - Mirror user's language. Financial terms stay English.
-- Be concise. Acknowledge uncertainty gracefully.
-- End with 1-2 sentence disclaimer, not a wall of text.`;
+- End with 1-2 sentence disclaimer.`;
