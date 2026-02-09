@@ -80,6 +80,27 @@ const EVENT_TYPES = {
                "trump", "特朗普", "战争", "冲突", "制裁", "北约", "中国", "俄罗斯", "台湾", "中东", "贸易战", "中美", "关税", "地缘"],
     reasoning_angles: ["Defense spending", "Energy security", "Supply chain reshoring", "Safe haven flow", "Commodity disruption"],
   },
+  market_event: {
+    name: "Market Structure Event / 市场结构事件",
+    keywords: ["VIX", "yield curve", "inversion", "credit spread", "liquidity", "margin call", "short squeeze", "gamma squeeze",
+               "put/call ratio", "fund flow", "risk-off", "risk-on", "sell-off", "melt-up", "volatility", "bear market", "bull market", "correction",
+               "收益率", "倒挂", "信用利差", "流动性", "爆仓", "逼空", "波动率", "熊市", "牛市", "崩盘", "暴跌", "暴涨", "恐慌指数"],
+    reasoning_angles: ["Regime shift", "Sector rotation", "Defensive vs cyclical", "Volatility arbitrage", "Credit contagion", "Institutional positioning"],
+  },
+  corporate_event: {
+    name: "Corporate Event / 企业事件",
+    keywords: ["earnings", "revenue", "guidance", "beat", "miss", "EPS", "merger", "acquisition", "M&A", "IPO", "buyback", "dividend",
+               "CEO", "spinoff", "restructuring", "downgrade", "upgrade", "analyst", "target price",
+               "财报", "营收", "业绩", "超预期", "不及预期", "并购", "收购", "上市", "回购", "分红", "拆分", "重组", "评级"],
+    reasoning_angles: ["Earnings transmission", "Supply chain re-rating", "Sector sentiment", "Multiple expansion/compression", "M&A arbitrage", "Capital return"],
+  },
+  fx_commodity: {
+    name: "FX & Commodity Cycle / 汇率与商品周期",
+    keywords: ["dollar", "DXY", "yuan", "yen", "euro", "forex", "currency", "gold price", "oil price", "copper", "lithium", "rare earth",
+               "iron ore", "wheat price", "commodity", "OPEC",
+               "美元", "汇率", "人民币", "日元", "欧元", "黄金价格", "油价", "铜价", "锂价", "稀土", "铁矿石", "大宗商品"],
+    reasoning_angles: ["Export/import winners", "Commodity cycle positioning", "Currency hedging", "Inflation transmission", "Resource nationalism"],
+  },
 } as const;
 
 const SEASONAL_CONTEXT: Record<number, string> = {
@@ -361,6 +382,85 @@ const CHAIN_TEMPLATES: Record<string, ChainTemplate> = {
     revenue_materiality: "high",
     seasonal_peak_months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
   },
+  // ---- Financial-to-Financial Templates (v3.1) ----
+  earnings_to_sector: {
+    name: "Earnings Surprise → Sector Re-rating",
+    pattern: "Bellwether earnings beat/miss → Read-through to sector peers → Multiple expansion/compression → Position in sympathy names",
+    disciplines: ["Accounting", "Market Mechanics", "Sector Analysis"],
+    typical_steps: 4,
+    triggers: ["earnings", "EPS", "beat", "miss", "guidance", "revenue", "财报", "超预期", "不及预期", "营收", "业绩"],
+    sector_hints: ["Same sector as reporting company", "Supply chain adjacents"],
+    ticker_seeds: { bullish: [], bearish: [] },
+    magnitude_range: "Reporting company: ±5-15% on surprise. Sympathy names: ±2-8%. Supply chain: ±1-5%. Effect decays within 2-5 trading days",
+    consensus_level: "medium",
+    revenue_materiality: "high",
+    seasonal_peak_months: [1, 2, 4, 5, 7, 8, 10, 11],
+  },
+  yield_curve_to_playbook: {
+    name: "Yield Curve Signal → Macro Playbook",
+    pattern: "Yield curve shape change → Recession/expansion probability shift → Historical sector rotation playbook → Position accordingly",
+    disciplines: ["Fixed Income", "Macro Economics", "Market History"],
+    typical_steps: 4,
+    triggers: ["yield curve", "inversion", "steepening", "2s10s", "10Y", "Treasury", "收益率", "倒挂", "国债", "美债"],
+    sector_hints: ["Financials", "Utilities", "Staples", "Tech", "Cyclicals"],
+    ticker_seeds: { bullish: ["XLU", "XLP", "TLT", "GLD"], bearish: ["KBE", "KRE", "XLF", "XLI"] },
+    magnitude_range: "Post-inversion 12mo: financials -10-20%, utilities +5-15%, staples +3-10%. Recession probability: 60-80% within 12-18 months historically",
+    consensus_level: "high",
+    revenue_materiality: "high",
+    seasonal_peak_months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+  },
+  credit_to_contagion: {
+    name: "Credit Event → Contagion Mapping",
+    pattern: "Credit stress signal → Identify counterparty exposure → Map contagion channels → Find safe havens and shorts",
+    disciplines: ["Credit Analysis", "Banking", "Systemic Risk"],
+    typical_steps: 5,
+    triggers: ["credit spread", "default", "CDS", "liquidity crisis", "bank run", "SVB", "margin call", "信用利差", "违约", "流动性", "爆仓", "暴雷"],
+    sector_hints: ["Banks", "REITs", "High-Yield Issuers", "Safe Haven"],
+    ticker_seeds: { bullish: ["GLD", "TLT", "BRK.B"], bearish: ["KRE", "IYR", "HYG", "JNK"] },
+    magnitude_range: "Distressed entity: -30-80%. Sector contagion: -10-25%. Safe havens: +5-15%. Recovery names (post-panic): +20-50% over 3-6 months",
+    consensus_level: "low",
+    revenue_materiality: "high",
+    seasonal_peak_months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+  },
+  fx_to_trade: {
+    name: "FX/Commodity Shift → Trade Winners & Losers",
+    pattern: "Currency or commodity price move → Export/import margin impact → Identify winners (weak-currency exporters) and losers (commodity importers)",
+    disciplines: ["International Trade", "FX Analysis", "Economics"],
+    typical_steps: 4,
+    triggers: ["dollar", "DXY", "yuan", "yen", "euro", "gold", "oil", "copper", "美元", "汇率", "人民币", "日元", "黄金", "油价", "铜"],
+    sector_hints: ["Multinationals", "Exporters", "Commodity Producers", "Importers"],
+    ticker_seeds: { bullish: ["XOM", "NEM", "FCX", "CAT"], bearish: ["WMT", "TGT", "NKE"] },
+    magnitude_range: "Strong dollar +5%: S&P 500 EPS drag ~2-3%. EM exporters: ±5-15%. Gold miners: 2-3x gold % move. Oil majors: 0.6-0.8x oil % move",
+    consensus_level: "medium",
+    revenue_materiality: "high",
+    seasonal_peak_months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+  },
+  housing_to_cycle: {
+    name: "Housing Signal → Economic Cycle Positioning",
+    pattern: "Housing data inflection → Leading indicator for broader economy → Position in housing-sensitive and cycle-sensitive names",
+    disciplines: ["Real Estate", "Macro Economics", "Consumer Finance"],
+    typical_steps: 4,
+    triggers: ["housing", "mortgage", "home sales", "NAHB", "housing starts", "rent", "房价", "房贷", "房地产", "租金"],
+    sector_hints: ["Homebuilders", "Building Materials", "Mortgage Lenders", "Home Improvement"],
+    ticker_seeds: { bullish: ["DHI", "LEN", "HD", "LOW", "SHW"], bearish: ["AGNC", "NLY"] },
+    magnitude_range: "Homebuilders: ±10-25% on cycle turns. Building materials: ±5-15%. Mortgage REITs: ±10-20%. Cycle confirmation takes 2-3 months of data",
+    consensus_level: "medium",
+    revenue_materiality: "high",
+    seasonal_peak_months: [3, 4, 5, 6, 9, 10],
+  },
+  narrative_to_crowding: {
+    name: "Crowded Narrative → Contrarian Opportunity",
+    pattern: "Dominant market narrative → Position crowding indicator → Identify reversal risk → Contrarian plays",
+    disciplines: ["Behavioral Finance", "Market Microstructure", "Sentiment Analysis"],
+    typical_steps: 4,
+    triggers: ["everyone", "crowded", "bubble", "FOMO", "overvalued", "overweight", "所有人都", "泡沫", "拥挤", "过热"],
+    sector_hints: ["Contrarian to crowded sector", "Unloved value sectors"],
+    ticker_seeds: { bullish: [], bearish: [] },
+    magnitude_range: "Crowding unwind: consensus names -10-25% in 1-3 months. Contrarian rotation: +8-20%. Timing is key — need catalyst",
+    consensus_level: "low",
+    revenue_materiality: "high",
+    seasonal_peak_months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+  },
 };
 
 function matchTemplates(eventType: string, keywords: string[]): string[] {
@@ -384,6 +484,9 @@ function matchTemplates(eventType: string, keywords: string[]): string[] {
       nature: ["disaster_to_supply", "weather_to_energy", "geopolitical_to_safehaven"],
       daily: ["consumption_to_industry", "emotion_to_capital"],
       geopolitical: ["geopolitical_to_safehaven", "geopolitical_to_supply", "supply_chain_bottleneck"],
+      market_event: ["yield_curve_to_playbook", "credit_to_contagion", "emotion_to_capital", "event_to_fed_rotation"],
+      corporate_event: ["earnings_to_sector", "narrative_to_crowding", "supply_chain_bottleneck"],
+      fx_commodity: ["fx_to_trade", "event_to_fed_rotation", "geopolitical_to_supply"],
     };
     matched.push(...(fallback[eventType] || ["consumption_to_industry"]));
   }
@@ -395,7 +498,7 @@ function matchTemplates(eventType: string, keywords: string[]): string[] {
 // Section 2.5: Complexity, Chain Scoring, Event Interaction
 // ======================================================================
 
-const CONSENSUS_EVENT_TYPES = new Set(["weather", "geopolitical", "economic", "technology", "policy"]);
+const CONSENSUS_EVENT_TYPES = new Set(["weather", "geopolitical", "economic", "technology", "policy", "market_event", "corporate_event", "fx_commodity"]);
 
 function assessComplexity(
   secondaryCount: number,
@@ -538,6 +641,17 @@ const INTERACTION_MATRIX: Record<string, InteractionEffect> = {
   "geopolitical+policy":        { effect: "compounding",   description: "Geopolitical conflict + policy response = sanctions/tariffs cascade", multiplier: 1.3 },
   "weather+nature":             { effect: "amplifying",    description: "Weather extreme + natural disaster = insurance/rebuilding demand surge", multiplier: 1.4 },
   "physiological+economic":     { effect: "amplifying",    description: "Health crisis + economic impact = healthcare spending + macro concern", multiplier: 1.2 },
+  // v3.1: Financial-to-financial interactions
+  "market_event+corporate_event": { effect: "amplifying",  description: "Market regime shift + earnings catalyst = amplified stock reaction (e.g., earnings miss during risk-off = 2x downside)", multiplier: 1.4 },
+  "market_event+economic":        { effect: "compounding", description: "Market structure signal + macro data = conviction multiplier for rate/sector bets", multiplier: 1.4 },
+  "market_event+geopolitical":    { effect: "compounding", description: "Market stress + geopolitical shock = liquidity crisis risk, safe-haven surge", multiplier: 1.5 },
+  "corporate_event+technology":   { effect: "amplifying",  description: "Tech bellwether earnings + sector momentum = read-through amplification", multiplier: 1.3 },
+  "corporate_event+economic":     { effect: "amplifying",  description: "Corporate signal + macro backdrop = stronger sector rotation signal", multiplier: 1.3 },
+  "fx_commodity+geopolitical":    { effect: "compounding", description: "Commodity supply risk + geopolitical escalation = price spike and volatility surge", multiplier: 1.5 },
+  "fx_commodity+economic":        { effect: "compounding", description: "FX/commodity shift + macro cycle = trade balance and inflation transmission", multiplier: 1.3 },
+  "fx_commodity+weather":         { effect: "amplifying",  description: "Weather disruption + commodity cycle = agricultural and energy price amplification", multiplier: 1.4 },
+  "market_event+fx_commodity":    { effect: "compounding", description: "Market regime + commodity cycle = macro positioning signal (e.g., risk-off + gold rally)", multiplier: 1.3 },
+  "corporate_event+policy":       { effect: "pivotal",     description: "Corporate action + regulatory response = outcome highly uncertain, binary risk", multiplier: 1.2 },
 };
 
 function getInteractionEffect(types: string[]): { effect: InteractionEffect | null; key: string } {
@@ -612,6 +726,16 @@ const CASES: HistCase[] = [
   { id: "oil-price-war-2020", title: "OPEC+ Price War: Crude Oil Goes Negative", year: 2020, trigger: "Saudi-Russia production cut talks collapse",
     chain_summary: "Output deal collapses → Saudi floods market → COVID demand crash → oil goes negative → energy sector restructuring", steps: ["OPEC+ talks break down (Geopolitics)","Saudi ramps to 12M bpd","COVID demand collapse compounds","WTI hits -$37/barrel (unprecedented)","Shale bankruptcies","Survivors consolidate capacity"],
     disciplines: ["Geopolitics","Economics","Supply Chain"], outcome: "WTI $60→-$37; XLE -50%; USO structural losses", tickers: ["USO","XLE","XOM","COP","OXY"], sector: "energy", magnitude: "extreme", time_to_impact: "Immediate to 1 year", lesson: "Supply war + demand crash = unprecedented; negative oil proves storage is a physical constraint", tags: ["oil","OPEC","Saudi","price war","energy","crude","负油价","石油","原油","能源","油价","暴跌","OPEC"] },
+  // v3.1: Financial-event-to-financial-event cases
+  { id: "yield-inversion-2019", title: "2019 Yield Curve Inversion: Recession Alarm Rings", year: 2019, trigger: "2Y-10Y Treasury yield curve inverts",
+    chain_summary: "Yield curve inverts → recession fear → banks sell off → utilities/staples outperform → Fed cuts", steps: ["2Y-10Y spread goes negative (-5bp)","Media amplifies recession narrative","KBE/KRE drop 10-15%","Utilities XLU hits all-time highs","Fed cuts 3 times in H2 2019","Equities actually rally by year-end"],
+    disciplines: ["Fixed Income","Macro Economics","Market History"], outcome: "XLU +25%; KBE -8%; SPY +29% (despite inversion)", tickers: ["XLU","XLP","KBE","KRE","TLT","GLD"], sector: "financials,utilities,macro", magnitude: "large", time_to_impact: "Immediate fear, 12-18 month recession lag", lesson: "Inversion signals recession eventually, but timing is imprecise — sector rotation starts immediately even if recession takes 18 months", tags: ["yield curve","inversion","recession","Treasury","bond","rates","Fed","bank","utilities","收益率","倒挂","衰退","国债","美债","利率","银行","美联储"] },
+  { id: "nvda-earnings-q3-2024", title: "NVDA Q3 FY25 Earnings: AI Bellwether Beats Again", year: 2024, trigger: "NVIDIA reports Q3 revenue $35.1B, beating $33.2B consensus",
+    chain_summary: "NVDA beats → data center capex thesis confirmed → AI supply chain re-rated → power/cooling plays surge", steps: ["NVDA revenue +94% YoY, guidance above consensus","Data center revenue $30.8B confirms AI spending wave","Sympathy: AMD +5%, AVGO +4%, MU +3%","Pick-and-shovel: VST +8%, VRT +6%","Memory: SK Hynix/Samsung HBM read-through","BUT: stock barely moves — beat was priced in"],
+    disciplines: ["Accounting","Market Mechanics","Sector Analysis"], outcome: "NVDA flat post-earnings (priced in); AMD +5%; VST +8%", tickers: ["NVDA","AMD","AVGO","VST","VRT","MU","SMH"], sector: "tech,energy", magnitude: "medium", time_to_impact: "0-5 trading days for sympathy; ongoing for sector theme", lesson: "When a bellwether beats, sympathy names often move more than the reporting company (especially if beat was expected). Pick-and-shovel plays can be the real winners.", tags: ["earnings","beat","NVIDIA","AI","GPU","data center","revenue","guidance","财报","超预期","英伟达","业绩","营收","芯片","算力","半导体"] },
+  { id: "dxy-surge-2022", title: "King Dollar 2022: DXY at 20-Year Highs Crushes Multinationals", year: 2022, trigger: "Fed aggressive hikes drive DXY above 114",
+    chain_summary: "Fed hikes → dollar surges → multinational EPS drag → EM crisis → commodities pressured", steps: ["Fed hikes 425bp in 2022","DXY rises from 95 to 114 (+20%)","S&P 500 EPS drag est. ~6-8%","P&G/MSFT/GOOGL all cite FX headwinds","EM currencies crash (GBP flash crash, JPY 150)","Gold paradox: dollar up but gold only -3% (real yield offset)"],
+    disciplines: ["FX Analysis","International Trade","Macro Economics"], outcome: "DXY 95→114; MSFT/GOOGL cite -5% revenue headwind; EM ETFs -20%", tickers: ["UUP","EEM","EFA","GLD","MSFT","PG"], sector: "macro,fx", magnitude: "large", time_to_impact: "Months, peaks with rate cycle", lesson: "Strong dollar = tax on US multinationals and EM. When dollar reverses, these same names get a tailwind. FX hedging lags 1-2 quarters.", tags: ["dollar","DXY","forex","currency","FX","yen","pound","Fed","美元","汇率","外汇","日元","英镑","美联储","升值"] },
 ];
 
 // Enhanced case search with recency, seasonal alignment, magnitude weighting
@@ -836,6 +960,92 @@ const DISCIPLINE_KNOWLEDGE: Record<string, string> = {
 - Positive event ≠ stock goes up — "buy the rumor, sell the news"
 - Everyone already long a ticker → even with good fundamentals, upside is limited (crowded trade)
 - Use forward PE (expected earnings) not trailing PE (past earnings) for decisions`,
+
+  market_event: `### Key Discipline Knowledge (Market Structure Events → Finance)
+
+**Yield Curve Playbook:**
+- 2Y-10Y inversion has preceded every recession since 1970 (lead time 6-24 months, median ~14 months)
+- False positive rate: ~1 in 9 (one inversion without recession)
+- Post-inversion sector rotation: Financials -15%, Utilities +10%, Staples +8%, Healthcare +7% (12mo avg)
+- Steepening from inverted = recession imminent (this is the real alarm, not the inversion itself)
+- Curve steepening on rate cuts = Fed acknowledges weakness
+
+**VIX / Volatility Framework:**
+- VIX 15-20 = normal, 20-30 = elevated concern, 30+ = panic, 40+ = crisis
+- VIX term structure: backwardation (front > back) = acute fear; contango = normal/complacent
+- VIX spike → mean-reverting within 2-4 weeks 80% of the time — sell vol on spikes is a historical edge
+- VIX >35 + put/call >1.2 = historically strong contrarian buy signal (within 6-12 months)
+
+**Credit Spread Signals:**
+- IG spread >200bp = stress; >300bp = crisis-level (historically only reached in 2008, 2020)
+- HY-IG spread widening = credit differentiation → contagion risk rising
+- Tight spreads (<100bp IG) = complacency → watch for sharp reversal
+
+**Common Mistakes:**
+- Yield curve inversion is a reliable signal but terrible timer — recession can be 6-24 months away
+- VIX spike alone is not a buy signal — need confirmation (put/call, breadth, credit)
+- "Risk-off" doesn't mean everything falls — safe havens rally (GLD, TLT, XLU)
+- Market regime shifts (bull→bear) take months to confirm — don't overreact to single signals`,
+
+  corporate_event: `### Key Discipline Knowledge (Corporate Events → Finance)
+
+**Earnings Transmission Rules:**
+- Bellwether beat: sector peers rally +1.5-3% avg in sympathy (strongest in first 2 trading days)
+- Bellwether miss: sector peers fall -2-4% (asymmetric — misses punish harder)
+- Guidance revision matters MORE than beat/miss — full-year raise → +3-7%; cut → -8-15%
+- Post-Earnings Announcement Drift (PEAD): stocks with big surprises drift for 60+ days
+- In crowded sectors, a mega-cap beat can paradoxically hurt smaller peers (capital concentrates)
+
+**M&A / Corporate Action:**
+- Target premium: +20-40% (day of announcement)
+- Acquirer typically trades -2-5% (overpayment concern)
+- Sector "who's next" premium: +3-8% for logical next targets
+- Buyback announcements: +2-4% short-term, +8-12% over 12 months vs peers
+- Insider buying clusters (3+ insiders in 30 days) = strongest bullish signal
+
+**Analyst Revisions:**
+- Single analyst upgrade: +2-5% in 5 days; downgrade: -3-7%
+- Multiple simultaneous revisions (consensus shift) have 2-3x the impact
+- Estimate revisions are a stronger predictor than absolute estimates
+
+**Common Mistakes:**
+- "Beat and raise" doesn't always mean stock goes up — whisper numbers and positioning matter
+- Priced-in beats (expected beats by >5%) often see "sell the news" reaction
+- M&A rumors: only actionable when combined with unusual options activity or credible source
+- Don't chase sympathy moves beyond day 2 — mean reversion typically starts day 3-5`,
+
+  fx_commodity: `### Key Discipline Knowledge (FX & Commodity Cycles → Finance)
+
+**Dollar (DXY) Framework:**
+- DXY +10% → S&P 500 EPS drag ~4-5% (40%+ of S&P revenue is international)
+- Strong dollar = headwind for multinationals (MSFT, PG, KO), tailwind for domestic-focused
+- Dollar strength correlates with: Fed hawkishness, US relative growth, risk-off
+- Dollar peak typically coincides with Fed rate peak — watch for pivot signal
+
+**Gold Framework:**
+- Gold vs real yields: strongest negative correlation (-0.8 to -0.9)
+- Real yield (10Y TIPS) is the single best predictor of gold direction
+- Real yield -100bp → gold +15-20%
+- Gold also responds to: central bank buying (structural since 2022), geopolitical fear, dollar weakness
+- Gold miners (GDX) = leveraged gold play (2-3x gold's % move)
+
+**Oil Framework:**
+- OPEC spare capacity <2M bpd = price spike risk; >4M bpd = effective ceiling
+- Oil +80% in 12 months has historically preceded recession (demand destruction)
+- Every $10/bbl move = ~$0.03/gallon gasoline = consumer spending impact
+- Energy sector earnings: 0.6-0.8x leverage to oil price move
+- Shale breakeven: ~$50-60 WTI — below this, US production declines
+
+**Copper/Industrial Metals:**
+- Copper/gold ratio: rising = risk-on/growth; falling = risk-off/recession fear
+- "Dr. Copper" as economic indicator: divergence from equities = warning signal
+- China's copper demand = ~50% of global — PBOC stimulus = copper bullish
+
+**Common Mistakes:**
+- Commodity price spike ≠ producers benefit equally — check hedging books
+- FX moves take 1-2 quarters to flow through to earnings (hedging lag)
+- Don't confuse dollar strength with US economic strength — can diverge during global crises
+- CNY 7.0 line: USD/CNY >7.3 = PBOC likely to intervene; <6.8 = export headwind for Chinese ADRs`,
 };
 
 // ======================================================================
@@ -883,6 +1093,30 @@ const QUANTITATIVE_ANCHORS: Record<string, QuantAnchor[]> = {
     { metric: "TSMC utilization threshold", value: ">95% = strong pricing, <80% = downturn", source: "TSMC earnings", usage: "Leading indicator for semiconductor cycle." },
     { metric: "Semiconductor inventory cycle", value: "~3-4 year full cycle", source: "Industry data", usage: "Inventory/revenue >1.5x = glut warning, <0.8x = shortage signal." },
     { metric: "Data center power growth", value: "20-30% CAGR through 2030", source: "IEA/McKinsey", usage: "Structural demand for VST, CEG, nuclear power." },
+  ],
+  market_event: [
+    { metric: "2Y-10Y spread inversion track record", value: "Preceded last 8 recessions; lead time 6-24 months, median ~14 months", source: "Fed/NBER", usage: "Confirm recession signal strength. False positive rate: ~1 in 9." },
+    { metric: "VIX term structure backwardation", value: "VIX > VIX3M = acute fear; normal contango = complacency", source: "CBOE", usage: "Backwardation with VIX >25 = high conviction risk-off. Front-month VIX/VIX3M >1.05 = panic mode." },
+    { metric: "IG credit spread recession threshold", value: ">200bp = stress; >300bp = crisis", source: "ICE BofA", usage: "Calibrate contagion risk. Current spread vs 10yr median tells you if market is pricing in trouble." },
+    { metric: "Put/call ratio extreme", value: ">1.2 = excessive fear (contrarian bullish); <0.5 = excessive complacency (contrarian bearish)", source: "CBOE", usage: "Sentiment extreme indicator. Combine with VIX for conviction." },
+    { metric: "Sector rotation after inversion", value: "Financials -15% avg, Utilities +10%, Staples +8%, Health +7% in 12mo post-inversion", source: "Historical study", usage: "Playbook for positioning after yield curve signal." },
+    { metric: "Short interest as % of float", value: ">20% = squeeze candidate; >40% = extreme", source: "FINRA", usage: "Identify short squeeze potential in risk-on reversal." },
+  ],
+  corporate_event: [
+    { metric: "Earnings surprise propagation", value: "Bellwether beat → sector peers +1.5-3% avg; miss → -2-4%", source: "Academic studies (Bernard & Thomas)", usage: "Sympathy move magnitude estimation. Effect strongest in first 2 trading days." },
+    { metric: "Guidance revision impact", value: "Full-year raise → +3-7% for stock; cut → -8-15%", source: "FactSet", usage: "Guidance matters more than beat/miss. Magnitude of revision drives reaction asymmetry." },
+    { metric: "Buyback announcement premium", value: "+2-4% in 30 days, +8-12% in 12 months vs peers", source: "Academic research", usage: "Positive signal especially when combined with insider buying." },
+    { metric: "M&A premium for target", value: "+20-40% for target; acquirer typically -2-5%", source: "Historical average", usage: "Also look for next logical target in same sector (sympathy bid premium +3-8%)." },
+    { metric: "Post-earnings drift", value: "Stocks with big beats continue drifting +2-5% over 60 days", source: "Academic PEAD research", usage: "Market underreacts to earnings surprises. This is tradeable alpha." },
+    { metric: "Analyst upgrade/downgrade impact", value: "Upgrade: +2-5% in 5 days; downgrade: -3-7%", source: "Market data", usage: "Effect amplified when multiple analysts revise simultaneously." },
+  ],
+  fx_commodity: [
+    { metric: "DXY vs S&P 500 EPS", value: "DXY +10% → S&P 500 EPS drag ~4-5% (40%+ of S&P revenue is international)", source: "Goldman Sachs", usage: "Quantify FX headwind/tailwind for US multinationals." },
+    { metric: "Gold vs real yields", value: "Strong negative correlation: real yield -100bp → gold +15-20%", source: "Historical regression", usage: "Real yield (TIPS) is the single best predictor of gold direction." },
+    { metric: "Oil price recession signal", value: "Oil +80% in 12mo historically preceded recession (but not always)", source: "Hamilton research", usage: "Oil spike is a growth tax. Every $10/bbl = ~$0.03/gal gasoline = consumer squeeze." },
+    { metric: "Copper-to-gold ratio", value: "Rising = risk-on/growth; falling = risk-off/recession fear", source: "Market data", usage: "Leading indicator for global growth expectations. Divergence from equities = warning." },
+    { metric: "OPEC spare capacity", value: "<2M bpd = price spike risk; >4M bpd = price cap", source: "IEA/OPEC", usage: "Determines upside volatility in oil. Low spare capacity amplifies geopolitical risk." },
+    { metric: "CNY 7.0 line", value: "USD/CNY >7.3 = PBOC likely to intervene; <6.8 = export headwind", source: "PBOC patterns", usage: "Key level for China trade-sensitive plays (BABA, PDD, NKE)." },
   ],
 };
 
