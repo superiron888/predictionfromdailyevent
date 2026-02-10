@@ -45,6 +45,7 @@ Step 1 [MANDATORY FIRST]: mr_if_reason(user_input, event_type) — pass your cla
 Step 2 [MANDATORY - in your thinking]: Follow reasoning-discipline protocol (depth adapts to complexity):
   ALWAYS: 事件锚定 → 链条构建 (prioritize by chain pre-score: STRONG first, WEAK to debunk) → 验证 (Pass/Weak/Fail)
   IF financial event (market_event/corporate_event/fx_commodity): Use financial-transmission skill — map transmission channels instead of butterfly chains. Ask: priced in? second derivative? consensus wrong?
+  IF novel event (tool output says "NOVEL EVENT DETECTED"): Use novel-event-reasoning skill — follow-the-money first-principles analysis. MUST execute domain knowledge search queries BEFORE reasoning. Trace money flows: who pays, who earns, size the impact, check priced-in.
   IF matched: 历史对照 (compare with returned cases, note recency + seasonal alignment)
   IF 3+ chains: 汇合分析 (convergence/conflict)
   IF recommended by tool: 二阶检测 (consensus check, hidden winners/losers)

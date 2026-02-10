@@ -59,7 +59,7 @@ Atomic Decomposition:
 
 ### Phase 2: Multi-Dimensional Chain Generation
 
-Generate one causal chain for each reasoning dimension. **Internal data structure** for each chain (provided to chain_validate tool):
+Generate one causal chain for each reasoning dimension. **Internal data structure** for each chain (used in your thinking, never shown to user):
 
 ```
 chain_id: N

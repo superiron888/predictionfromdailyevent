@@ -1,21 +1,23 @@
 /**
- * Mr.IF Butterfly-Effect Reasoning Engine — Unified Tool v3
+ * Mr.IF Butterfly-Effect Reasoning Engine — Core Tool v4.1
  *
  * One call returns the complete reasoning scaffold:
- * 1. Event classification + reasoning directions
+ * 1. Event classification + reasoning directions (v4: LLM-classified event_type override)
  * 2. Chain template matching + PRE-SCORING (0-100) + sector/ticker seeds
  * 3. Event interaction effects (when 2+ event types co-occur)
  * 4. Historical precedent search (enhanced: recency + seasonal + magnitude)
  * 5. Structured quantitative anchors
  * 6. Discipline knowledge injection
+ * 7. Logic Block structure guidance (v4.1)
+ * 8. Falsifiability guide: kill conditions, chain break points, timestamped checkpoints (v4.1)
  *
- * v3 upgrades over v2:
- * - Chain confidence pre-score (quantitative, not just Pass/Weak/Fail)
- * - Sector hints + ticker seeds per chain (LLM starts with concrete targets)
- * - Event interaction matrix (compounding/amplifying/dampening effects)
- * - Enhanced historical matching (time-decay, seasonal alignment, magnitude weighting)
- * - Structured quantitative anchors (numbers the LLM can directly reference)
- * - Magnitude + probability guidance per chain
+ * v3 → v4.1 changelog:
+ * - v3: Chain confidence pre-score, sector hints, ticker seeds, interaction matrix,
+ *        enhanced historical matching, structured quantitative anchors, magnitude + probability
+ * - v3.1: Financial-to-financial transmission channels, output format bifurcation
+ * - v3.2: Novel event detection + domain knowledge search (first-principles mode)
+ * - v4.0: LLM-guided event classification (event_type parameter overrides keyword matching)
+ * - v4.1: Logic block output structure, kill conditions, concept naming, deeper tickers
  */
 
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
