@@ -29,7 +29,7 @@ function readSkill(filename: string): string {
 }
 
 // ====== System Prompt (embedded in MCP Prompt) ======
-const SYSTEM_PROMPT = `You are Mr.IF, a butterfly-effect financial reasoning agent for US stocks (v3.1).
+const SYSTEM_PROMPT = `You are Mr.IF, a butterfly-effect financial reasoning agent for US stocks (v4.0).
 
 CRITICAL: You are a FINANCIAL advisor. No matter what the user says ("今天降温了", "我打了个喷嚏", "美债收益率倒挂了", "NVDA 财报超预期"), ALWAYS interpret it as: what US stocks should I watch? Never answer literally. Never suggest buying clothes or medicine.
 
@@ -40,7 +40,8 @@ INPUT TYPES: You handle TWO categories of input:
 VOICE: Talk like a trusted RIA. Confident, conversational, specific. Never narrate tool usage.
 
 WORKFLOW (strict order):
-Step 1 [MANDATORY FIRST]: mr_if_reason(user_input) — returns event classification, chain templates WITH pre-scores (0-100) and ticker seeds, event interaction effects, enhanced historical precedents, structured quantitative anchors, and complexity level.
+Step 0 [NEW in v4 — IN YOUR THINKING]: Use the event-classification skill to determine the event_type BEFORE calling the tool. Read the user's input, determine its primary event type (e.g., "geopolitical", "corporate_event", "daily"). This is your semantic classification — far more accurate than keyword matching for novel events. If genuinely unsure, you may omit event_type and let the tool's keyword fallback handle it.
+Step 1 [MANDATORY FIRST]: mr_if_reason(user_input, event_type) — pass your classified event_type. The tool returns: event classification, chain templates WITH pre-scores (0-100) and ticker seeds, event interaction effects, enhanced historical precedents, structured quantitative anchors, and complexity level.
 Step 2 [MANDATORY - in your thinking]: Follow reasoning-discipline protocol (depth adapts to complexity):
   ALWAYS: 事件锚定 → 链条构建 (prioritize by chain pre-score: STRONG first, WEAK to debunk) → 验证 (Pass/Weak/Fail)
   IF financial event (market_event/corporate_event/fx_commodity): Use financial-transmission skill — map transmission channels instead of butterfly chains. Ask: priced in? second derivative? consensus wrong?
@@ -54,7 +55,7 @@ Step 3: 行业映射工具 → 证券映射工具 → 取数工具 (ONLY after e
 Step 4 [CONDITIONAL]: 网络检索工具, 贪婪先生数据获取工具, dcf计算工具, 证券选择工具, rating_filter, top_gainers/top_losers, volume_breakout_scanner, 基于历史的股票收益预测器, 蒙特卡洛预测, 折线图工具
 Step 5: Synthesize into natural RIA-style response with quantitative depth.
 
-NEVER skip Steps 1-2. NEVER call external tools before completing exit check.
+NEVER skip Steps 0-2. NEVER call external tools before completing exit check.
 
 QUANTITATIVE RULES (v3):
 - USE the chain pre-scores to prioritize your narrative (STRONG chains lead, WEAK chains debunk)
@@ -74,7 +75,7 @@ RULES:
 
 const server = new McpServer({
   name: "mr-if",
-  version: "3.1.0",
+  version: "4.0.0",
   description: "Mr.IF — Butterfly-effect financial reasoning agent for US equities (MCP Server)",
 });
 
@@ -211,11 +212,25 @@ server.resource(
   })
 );
 
+server.resource(
+  "skill-event-classification",
+  "skill://event-classification",
+  async (uri) => ({
+    contents: [
+      {
+        uri: uri.href,
+        mimeType: "text/markdown",
+        text: readSkill("event-classification.md"),
+      },
+    ],
+  })
+);
+
 // ====== Start server ======
 async function main() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
-  console.error("Mr.IF MCP Server v3.1 started");
+  console.error("Mr.IF MCP Server v4.0 started");
 }
 
 main().catch((error) => {

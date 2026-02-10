@@ -1376,16 +1376,23 @@ function getQuantAnchors(eventTypes: string[]): QuantAnchor[] {
 export function registerMrIfReason(server: McpServer): void {
   server.tool(
     "mr_if_reason",
-    `Mr.IF financial reasoning engine v3.1. Handles TWO types of input:
+    `Mr.IF financial reasoning engine v4.0. Handles TWO types of input:
 1) Daily-life events ("everyone's sick", "it's getting cold") → butterfly-effect cross-domain reasoning
 2) Financial events ("yield curve inverted", "NVDA earnings beat", "oil price crashed") → financial-transmission channel mapping (sector rotation, earnings read-through, macro repricing, contagion, FX pass-through)
 Returns: event classification, chain templates WITH pre-scores (0-100) and ticker seeds, event interaction effects, enhanced historical precedents, structured quantitative anchors, discipline knowledge, and complexity-based reasoning depth recommendation.
+NEW in v4: accepts optional 'event_type' parameter for LLM-driven classification (use the event-classification skill to determine this). When provided, overrides internal keyword matching for superior coverage of novel/ambiguous events.
 This is Mr.IF's core reasoning tool — MUST be called FIRST before all other tools. ALWAYS interpret user input from a financial perspective.`,
     {
       user_input: z.string().describe("User's raw input, e.g. 'everyone's been sick lately', 'Trump is at it again'"),
+      event_type: z.string().optional().describe(
+        "LLM-classified event type. When provided, overrides internal keyword classification. " +
+        "Valid values: physiological, weather, economic, social, technology, policy, nature, daily, " +
+        "geopolitical, market_event, corporate_event, fx_commodity. " +
+        "Use the event-classification skill to determine this. Omit if unsure — the tool will fall back to keyword matching."
+      ),
       current_date: z.string().optional().describe("Current date YYYY-MM-DD"),
     },
-    async ({ user_input, current_date }) => {
+    async ({ user_input, event_type, current_date }) => {
       const date = current_date ? new Date(current_date) : new Date();
       const month = date.getMonth() + 1;
       const year = date.getFullYear();
@@ -1393,6 +1400,18 @@ This is Mr.IF's core reasoning tool — MUST be called FIRST before all other to
 
       // 1. Event classification
       const cls = classifyEvent(user_input);
+
+      // v4: LLM-classified event_type override
+      const VALID_EVENT_TYPES = new Set(Object.keys(EVENT_TYPES));
+      const llmOverride = event_type && VALID_EVENT_TYPES.has(event_type);
+      if (llmOverride) {
+        cls.primary_type = event_type;
+      }
+
+      // Compute isFinancialEvent early (needed by chainSection and dynamicSearch)
+      const FINANCIAL_EVENT_TYPES = new Set(["market_event", "corporate_event", "fx_commodity"]);
+      const isFinancialEvent = FINANCIAL_EVENT_TYPES.has(cls.primary_type);
+
       const primaryInfo = EVENT_TYPES[cls.primary_type as keyof typeof EVENT_TYPES];
       const allDirections: string[] = primaryInfo ? [...primaryInfo.reasoning_angles] : ["Consumer trend"];
       for (const sec of cls.secondary_types) {
@@ -1507,12 +1526,9 @@ This is Mr.IF's core reasoning tool — MUST be called FIRST before all other to
           ).join("\n\n")
         : "No direct historical match. This is novel territory — build chains carefully and note the absence of precedent.";
 
-      // Determine reasoning mode (moved up for dynamic search dependency)
-      const FINANCIAL_EVENT_TYPES = new Set(["market_event", "corporate_event", "fx_commodity"]);
-      const isFinancialEvent = FINANCIAL_EVENT_TYPES.has(cls.primary_type);
-
       // --- Novel Event Detection ---
-      const isNovelEvent = cls.matched_keywords.length === 0;
+      // Novel = keywords didn't match AND LLM didn't provide a classification
+      const isNovelEvent = cls.matched_keywords.length === 0 && !llmOverride;
 
       // --- Dynamic Historical Search ---
       const bestHistScore = histMatches.length > 0 ? histMatches[0].score : 0;
@@ -1549,11 +1565,11 @@ This is Mr.IF's core reasoning tool — MUST be called FIRST before all other to
         ? `- **REASONING MODE: FINANCIAL TRANSMISSION** — This is a direct financial event. The Transmission Channels below map how this event propagates through markets. For each channel, evaluate: (1) Already priced in? (2) What's the second derivative? (3) Where is consensus wrong? Reference the financial-transmission skill for methodology.`
         : `- **REASONING MODE: BUTTERFLY EFFECT** — This is a daily-life/non-financial event. Build cross-domain causal chains from the event to financial implications. Reference butterfly-effect-chain skill for methodology.`;
 
-      const output = `# Mr.IF Reasoning Engine Output v3.2
+      const output = `# Mr.IF Reasoning Engine Output v4.0
 
 ## 1. Event Classification
 - User input: "${user_input}"
-- Event type: ${cls.primary_type} (${primaryInfo?.name || "Daily Observation"})
+- Event type: ${cls.primary_type} (${primaryInfo?.name || "Daily Observation"})${llmOverride ? ` [LLM-CLASSIFIED — overriding keyword match]` : ""}
 - Secondary types: ${cls.secondary_types.join(", ") || "None"}
 - Matched keywords: ${cls.matched_keywords.join(", ") || "No exact match — using default templates"}
 - Date: ${date.toISOString().split("T")[0]}

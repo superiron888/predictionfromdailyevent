@@ -168,8 +168,10 @@ Rule: If uncertain → say "needs confirmation via data tool" and actually confi
 ## Collaboration with Skills
 
 ```
+Event classification (BEFORE tool call) → reference event-classification.md to determine event_type
 Chain construction (daily events) → reference butterfly-effect-chain.md patterns and three laws
 Transmission mapping (financial events) → reference financial-transmission.md channels and 3-question test
+Novel event analysis → reference novel-event-reasoning.md for first-principles money flow tracing
 Discipline reasoning → reference cross-domain-reasoning.md for anchors, mistakes, bridges
 Second-order detection → reference second-order-thinking.md detection tools
 Quantitative reasoning → reference quantitative-reasoning.md for magnitude/probability calibration
@@ -178,6 +180,8 @@ Knowledge anchors → use discipline knowledge returned by mr_if_reason tool
 ```
 
 **Note**: When the tool output says `REASONING MODE: FINANCIAL TRANSMISSION`, prioritize financial-transmission.md over butterfly-effect-chain.md. The tool's Transmission Channel output is your starting framework — supplement, don't rebuild.
+
+**v4 Note**: Always self-classify using event-classification.md BEFORE calling `mr_if_reason`. Pass `event_type` to the tool. This is especially critical for novel events (Olympics, elections, scandals) where keyword matching fails.
 
 ---
 
