@@ -1607,6 +1607,28 @@ ${secondaryKnowledge ? `\n${secondaryKnowledge}` : ""}
 
 ${recommendationSummary}
 
+## 8. Falsifiability Guide [ACTION REQUIRED]
+For each chain you build, you MUST define:
+
+**A. Kill Condition** — What specific, measurable threshold would INVALIDATE this thesis?
+- Be precise: not "if data is bad" but "if EIA draw < 80 Bcf" or "if CPI MoM > 0.4%"
+- Every recommended ticker needs a kill condition in your output
+- This is what separates professional analysis from opinion
+
+**B. Chain Break Point** — Which single step in the chain is MOST LIKELY to fail?
+- Identify the weakest link in each chain (the step with least empirical support)
+- Mention it naturally in your narrative: "The riskiest assumption here is..."
+
+**C. Timestamped Checkpoints** — When can the user VERIFY this thesis?
+- Key Catalysts must include specific dates and times when possible
+- Format: "EIA storage report (Thu Feb 13, 10:30 ET)" not just "EIA report"
+- If the date is uncertain, give a range: "expected week of Mar 10"
+
+**D. Ticker Depth** — Dig one layer deeper than the obvious names
+- For each sector identified, include at least ONE non-obvious / mid-cap / niche play
+- The consensus large-cap is the starting point, not the ending point
+- Think: "If LMT is the obvious defense name, who is the BWXT/KTOS of this thesis?"
+
 Now follow the **reasoning-discipline** protocol in your thinking. Depth = **${complexity}**. Use chain scores to allocate reasoning effort. Then proceed to external tools.`;
 
       return {
