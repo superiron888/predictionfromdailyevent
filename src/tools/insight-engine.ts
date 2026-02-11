@@ -231,27 +231,47 @@ const EVENT_CONFIGS: Record<string, EventConfig> = {
         example_tickers: ["Varies by trend"],
         time_horizon: "Months to years (structural trends)",
         typical_magnitude: "Large if structural, negligible if fad"
+      },
+      {
+        name: "Life Event Clustering → Adjacent Industry Demand",
+        chain: "Social phenomenon (marriage/birth/aging wave) → cluster of related spending → adjacent industries benefit",
+        theme_sectors: ["Bridal/Events", "Housing", "Baby Products", "Senior Care", "Insurance"],
+        example_tickers: ["ETSY", "W", "DHI", "LEN", "SHW", "HD"],
+        time_horizon: "Seasonal patterns repeat annually; demographic trends = years",
+        typical_magnitude: "Wedding season: bridal industry +15-20% seasonal. Baby boom echo: baby product revenue +5-8% sustained"
+      },
+      {
+        name: "Demographic Shift → Structural Demand Reallocation",
+        chain: "Population aging/migration/urbanization → long-term spending reallocation → structural winners over 5-10 years",
+        theme_sectors: ["Healthcare", "Senior Living", "Financial Services", "Sun Belt Real Estate"],
+        example_tickers: ["UNH", "HCA", "WELL", "O", "EQR"],
+        time_horizon: "Years to decades (slowest but most reliable)",
+        typical_magnitude: "65+ population +3%/year → healthcare spending +5-7%/year. This is the closest thing to a 'sure thing' in finance"
       }
     ],
     consensus_traps: [
       "Distinguish trend from fad — needs penetration rate and adoption curve analysis",
       "Social media buzz ≠ economic impact",
-      "Generational stereotypes oversimplify actual spending data"
+      "Generational stereotypes oversimplify actual spending data",
+      "Seasonal social events (weddings in June, babies 9 months later) are already in models — only deviations matter"
     ],
     inversion_prompts: [
       "If this social trend reverses, who benefits?",
       "Who profits from the BACKLASH against this trend?",
-      "Is the market pricing this as a permanent shift when it might be temporary?"
+      "Is the market pricing this as a permanent shift when it might be temporary?",
+      "If everyone is getting married, who serves the people who AREN'T? (Singles economy)"
     ],
     behavioral_deltas: [
       "Consumer: fundamental preference shifts in spending, living, working",
-      "Corporate: talent strategy, workplace design, product development",
-      "Policy: regulation response to social changes"
+      "Corporate: talent strategy, workplace design, product development, marketing reallocation",
+      "Policy: regulation response to social changes (family policy, housing policy)",
+      "Institutional: demographic-driven allocation shifts (aging → bonds, millennials → tech)"
     ],
     historical_cases: [
       "Remote work (2020-present): ZM 5x then -90%. EQIX steadily +40%. The 'obvious' play (ZM) was wrong; the infrastructure play was right.",
       "GLP-1/Ozempic culture (2023-): LLY +100%, but MDLZ and snack stocks only -5-10% (overhyped fear).",
-      "Meme stock phenomenon (2021): GME/AMC spectacular but temporary. Structural winner was options market infrastructure."
+      "Meme stock phenomenon (2021): GME/AMC spectacular but temporary. Structural winner was options market infrastructure.",
+      "US marriage recovery 2021-22 (post-COVID backlog): wedding spending +30%. Surprise winner: travel (destination weddings) > bridal retailers."
     ]
   },
 
@@ -315,85 +335,259 @@ const EVENT_CONFIGS: Record<string, EventConfig> = {
     ]
   },
 
-  // Simplified configs for remaining types (technology, policy, nature, fx_commodity, economic)
   technology: {
     description: "Tech breakthroughs → industry disruption, infrastructure demand, winner/loser revaluation",
-    chains: [{
-      name: "Tech Paradigm → Shovel Seller → Infrastructure",
-      chain: "Tech breakthrough → application explosion → infrastructure demand → 'shovel sellers' benefit",
-      theme_sectors: ["Semiconductor", "Cloud", "Data Center", "Power/Cooling"],
-      example_tickers: ["NVDA", "AVGO", "MSFT", "AMZN", "VST", "VRT"],
-      time_horizon: "Quarters to years",
-      typical_magnitude: "Paradigm shifts are the largest magnitude events"
-    }],
-    consensus_traps: ["The application layer is consensus; the infrastructure layer is where edge is"],
-    inversion_prompts: ["What if this tech is overhyped? Who benefits from the correction?"],
-    behavioral_deltas: ["Corporate: capex surge → infrastructure providers benefit"],
-    historical_cases: ["AI 2023-24: NVDA was consensus. Real surprise winners: VST (nuclear power), VRT (cooling). Infra > application."]
+    chains: [
+      {
+        name: "Tech Paradigm → Shovel Seller → Infrastructure",
+        chain: "Tech breakthrough → application explosion → infrastructure demand → 'shovel sellers' benefit",
+        theme_sectors: ["Semiconductor", "Cloud", "Data Center", "Power/Cooling"],
+        example_tickers: ["NVDA", "AVGO", "MSFT", "AMZN", "VST", "VRT"],
+        time_horizon: "Quarters to years",
+        typical_magnitude: "Paradigm shifts are the largest magnitude events"
+      },
+      {
+        name: "Disruption → Legacy Loser → Short Side",
+        chain: "New tech displaces old → legacy revenue declines → market reprices losers (often delayed)",
+        theme_sectors: ["Legacy incumbents", "Disrupted intermediaries", "Declining formats"],
+        example_tickers: ["Varies — the disrupted company/sector"],
+        time_horizon: "Quarters to years (market is slow to price decline)",
+        typical_magnitude: "Revenue declines of 5-15%/year can persist for years before market fully prices"
+      },
+      {
+        name: "Adoption Curve → S-Curve Inflection → Winner-Take-Most",
+        chain: "Adoption crosses critical threshold → network effects kick in → winner-take-most dynamics → late shorts get squeezed",
+        theme_sectors: ["Platform companies", "Network-effect businesses"],
+        example_tickers: ["META", "NFLX", "TSLA", "UBER"],
+        time_horizon: "Watch penetration rates — inflection usually at 10-20% adoption",
+        typical_magnitude: "Pre-inflection: volatile. Post-inflection: can 3-5x in 2-3 years"
+      }
+    ],
+    consensus_traps: [
+      "The application layer is consensus; the infrastructure layer is where edge is",
+      "Demo ≠ product. Many 'breakthroughs' take 3-5 years to monetize (see: VR, blockchain, self-driving)",
+      "The most hyped company is rarely the best investment — shovel sellers often outperform gold miners"
+    ],
+    inversion_prompts: [
+      "What if this tech is overhyped? Who benefits from the correction?",
+      "Who is DISRUPTED by this technology? The loser side is often underanalyzed",
+      "What legacy tech becomes MORE valuable because of the new tech? (Complement goods effect)"
+    ],
+    behavioral_deltas: [
+      "Corporate: capex surge → infrastructure providers benefit; R&D reallocation",
+      "Consumer: adoption curve → early adopters vs mainstream lag",
+      "Institutional: theme-based ETF flows → crowding risk in popular names",
+      "Policy: regulatory catch-up lag → window of unregulated growth"
+    ],
+    historical_cases: [
+      "AI 2023-24: NVDA was consensus. Real surprise winners: VST (nuclear power +180%), VRT (cooling +200%). Infra > application.",
+      "iPhone 2007: AAPL was consensus. Surprise winner: ARM Holdings (chip architecture). Surprise loser: Nokia (-95% over 5 years).",
+      "Cloud computing 2010s: Everyone bought AMZN/MSFT. But Datadog (DDOG) and MongoDB (MDB) went from unknown to $20B+ market cap."
+    ]
   },
 
   policy: {
     description: "Government actions → regulatory impact, sector rotation, compliance costs",
-    chains: [{
-      name: "Policy → Industry Impact → Adjustment",
-      chain: "Regulation/tariff/subsidy → affected industry cost/revenue change → repricing",
-      theme_sectors: ["Depends on specific policy"],
-      example_tickers: ["Depends on policy"],
-      time_horizon: "Weeks to years depending on implementation",
-      typical_magnitude: "Policy certainty matters more than policy direction"
-    }],
-    consensus_traps: ["Policy announcements are priced in; implementation surprises are not"],
-    inversion_prompts: ["What if this policy is watered down or reversed?"],
-    behavioral_deltas: ["Corporate: compliance cost, strategic pivot. Consumer: behavioral response to incentives"],
-    historical_cases: ["Tariffs 2018-19: First round → market -10%. Second round → market -3%. Adaptation reduces impact."]
+    chains: [
+      {
+        name: "Policy Announcement → Sector Re-Rating",
+        chain: "Regulation/tariff/subsidy → affected industry cost/revenue change → repricing",
+        theme_sectors: ["Depends on specific policy"],
+        example_tickers: ["Depends on policy"],
+        time_horizon: "Weeks to years depending on implementation",
+        typical_magnitude: "Policy certainty matters more than policy direction"
+      },
+      {
+        name: "Subsidy/Incentive → Demand Pull-Forward → Bust Cycle",
+        chain: "Government subsidy → artificial demand spike → pull-forward → demand cliff when subsidy expires",
+        theme_sectors: ["Clean Energy", "EV", "Housing", "Healthcare"],
+        example_tickers: ["TSLA", "ENPH", "SEDG", "DHI", "LEN"],
+        time_horizon: "Subsidy period: boom. Post-expiration: 6-12 months demand cliff",
+        typical_magnitude: "Solar ITC changes → ENPH/SEDG -60% in 2023 (partly pull-forward effect)"
+      },
+      {
+        name: "Regulation → Compliance Cost → Moat Widening",
+        chain: "New regulation → compliance cost increases → small players can't afford → large incumbents gain share",
+        theme_sectors: ["Finance", "Healthcare", "Energy", "Tech platforms"],
+        example_tickers: ["JPM", "UNH", "GOOGL"],
+        time_horizon: "1-3 years for competitive effects to emerge",
+        typical_magnitude: "Counter-intuitive: regulation often HELPS large incumbents"
+      }
+    ],
+    consensus_traps: [
+      "Policy announcements are priced in; implementation surprises are not",
+      "Markets often overreact to policy headlines and underreact to actual implementation",
+      "Don't assume policy = permanent. Administrations change, regulations get rolled back"
+    ],
+    inversion_prompts: [
+      "What if this policy is watered down or reversed?",
+      "What if regulation HELPS incumbents by raising barriers to entry?",
+      "Who benefits from the UNCERTAINTY itself? (Consultants, lawyers, compliance tech)"
+    ],
+    behavioral_deltas: [
+      "Corporate: compliance cost, strategic pivot, lobbying spend increase",
+      "Consumer: behavioral response to incentives/penalties",
+      "Institutional: ESG/regulatory screens → forced selling or buying",
+      "Policy: regulatory cascade — one agency acts, others follow"
+    ],
+    historical_cases: [
+      "Tariffs 2018-19: First round → market -10%. Second round → market -3%. Adaptation reduces impact.",
+      "Dodd-Frank 2010: Expected to hurt big banks. Actually hurt small banks more — JPM/BAC gained market share.",
+      "IRA clean energy subsidies 2022: ENPH +50% in 3 months, then -70% over next year (pull-forward + rate sensitivity)."
+    ]
   },
 
   nature: {
     description: "Natural disasters → insurance, supply chain, infrastructure, safety regulation",
-    chains: [{
-      name: "Disaster → Insurance + Rebuild",
-      chain: "Natural event → damage assessment → insurance claims → rebuilding demand",
-      theme_sectors: ["Insurance", "Construction", "Building Materials"],
-      example_tickers: ["ALL", "TRV", "HD", "LOW", "CAT"],
-      time_horizon: "Immediate (insurance) → months (rebuild)",
-      typical_magnitude: "Depends on insured losses. >$10B = material."
-    }],
-    consensus_traps: ["Insurance stocks often recover because they can raise premiums after disasters"],
-    inversion_prompts: ["If disasters increase insurance premiums, that's actually GOOD for insurers long-term"],
-    behavioral_deltas: ["Consumer: prep buying, relocation. Policy: emergency spending, regulation review"],
-    historical_cases: ["Hurricane Katrina 2005: Insurance -15% initially, then +20% over 12 months (premium hikes). HD/LOW +10%."]
+    chains: [
+      {
+        name: "Disaster → Insurance + Rebuild",
+        chain: "Natural event → damage assessment → insurance claims → rebuilding demand",
+        theme_sectors: ["Insurance", "Construction", "Building Materials"],
+        example_tickers: ["ALL", "TRV", "HD", "LOW", "CAT"],
+        time_horizon: "Immediate (insurance) → months (rebuild)",
+        typical_magnitude: "Depends on insured losses. >$10B = material."
+      },
+      {
+        name: "Supply Chain Disruption → Bottleneck → Alternative Supplier",
+        chain: "Disaster hits production hub → supply shortage → price spike → alternative suppliers benefit",
+        theme_sectors: ["Semiconductor", "Auto", "Chemicals", "Agriculture"],
+        example_tickers: ["Varies by affected supply chain"],
+        time_horizon: "Weeks to months depending on recovery time",
+        typical_magnitude: "2011 Thailand flood → HDD shortage → WDC +40%. Japan earthquake → auto parts shortage → months of production cuts"
+      },
+      {
+        name: "Disaster Frequency → Structural Re-Pricing of Risk",
+        chain: "Increasing disaster frequency → insurance repricing → real estate repricing → migration patterns",
+        theme_sectors: ["Insurance", "Real Estate", "Sun Belt vs. climate-risk areas"],
+        example_tickers: ["RE", "RNR", "O", "AMT"],
+        time_horizon: "Years (structural trend, not one-off)",
+        typical_magnitude: "Florida property insurance +40-60% in 2022-23. Long-term migration from high-risk to low-risk zones."
+      }
+    ],
+    consensus_traps: [
+      "Insurance stocks often recover because they can raise premiums after disasters",
+      "Don't extrapolate single disaster into permanent trend (unless frequency is genuinely increasing)",
+      "Rebuild trade is real but timing is hard — often 6-12 months before spending shows in earnings"
+    ],
+    inversion_prompts: [
+      "If disasters increase insurance premiums, that's actually GOOD for insurers long-term",
+      "What if this disaster accelerates a migration trend that was already happening?",
+      "What goes UP during a disaster? (Generators, construction equipment, temporary housing)"
+    ],
+    behavioral_deltas: [
+      "Consumer: prep buying (before), relocation decisions (after), insurance shopping",
+      "Corporate: supply chain review, dual-sourcing, inventory buffer increase",
+      "Policy: emergency spending, building codes, zoning changes",
+      "Institutional: catastrophe bond repricing, risk model updates"
+    ],
+    historical_cases: [
+      "Hurricane Katrina 2005: Insurance -15% initially, then +20% over 12 months (premium hikes). HD/LOW +10%.",
+      "Japan earthquake/tsunami 2011: Toyota production -40% for months. Alternative auto suppliers benefited. TSMC unaffected → gained share.",
+      "Thailand floods 2011: Global HDD shortage → WDC +40%, Seagate +30%. Showed how concentrated supply chains amplify local disasters."
+    ]
   },
 
   fx_commodity: {
     description: "Currency/commodity moves → earnings impact, trade flows, inflation transmission",
-    chains: [{
-      name: "FX/Commodity Shift → Earnings Impact",
-      chain: "Price move → export/import margin change → earnings revision → stock repricing",
-      theme_sectors: ["Multinationals", "Commodity producers", "Import-dependent sectors"],
-      example_tickers: ["XOM", "GOLD", "NEM", "DXY-sensitive stocks"],
-      time_horizon: "1-2 quarters for earnings impact",
-      typical_magnitude: "DXY +10% → S&P EPS drag ~4-5%"
-    }],
-    consensus_traps: ["Commodity price moves are often mean-reverting; don't extrapolate"],
-    inversion_prompts: ["If oil spikes, obvious = energy stocks up. But what about consumer spending drag?"],
-    behavioral_deltas: ["Institutional: currency hedging adjustments. Corporate: pricing strategy, sourcing changes"],
-    historical_cases: ["Oil spike 2022: Energy +40% (sustained). But consumer discretionary -15% (spending drag). Both sides mattered."]
+    chains: [
+      {
+        name: "FX/Commodity Shift → Earnings Impact",
+        chain: "Price move → export/import margin change → earnings revision → stock repricing",
+        theme_sectors: ["Multinationals", "Commodity producers", "Import-dependent sectors"],
+        example_tickers: ["XOM", "GOLD", "NEM", "DXY-sensitive stocks"],
+        time_horizon: "1-2 quarters for earnings impact",
+        typical_magnitude: "DXY +10% → S&P EPS drag ~4-5%"
+      },
+      {
+        name: "Commodity Spike → Consumer Cost → Demand Destruction",
+        chain: "Commodity price spike → input cost rises → consumer price increases → demand destruction → economic slowdown",
+        theme_sectors: ["Consumer Discretionary", "Airlines", "Trucking", "Retail"],
+        example_tickers: ["XRT", "DAL", "UAL", "KSS", "TGT"],
+        time_horizon: "Lagged 1-2 quarters (price pass-through takes time)",
+        typical_magnitude: "Oil +50% → consumer discretionary typically -5 to -10% over following 2 quarters"
+      },
+      {
+        name: "Gold Signal → Macro Regime Read",
+        chain: "Gold move → decode whether it's inflation hedge, fear hedge, or dollar hedge → different sector implications",
+        theme_sectors: ["Precious Metals", "TIPS", "Real Assets", "Utilities"],
+        example_tickers: ["GLD", "GDX", "TIP", "SCHH"],
+        time_horizon: "Depends on regime: inflation = quarters, fear = weeks, dollar = months",
+        typical_magnitude: "Gold +20% in a year → usually one of three macro regimes. Knowing WHICH one matters more than the gold move itself"
+      }
+    ],
+    consensus_traps: [
+      "Commodity price moves are often mean-reverting; don't extrapolate",
+      "Oil spikes → everyone buys energy stocks. But the second-order (consumer spending drag) is often bigger",
+      "Strong dollar is bad for multinationals, but good for importers. Net effect on S&P depends on composition"
+    ],
+    inversion_prompts: [
+      "If oil spikes, obvious = energy stocks up. But what about consumer spending drag?",
+      "If gold is surging, is it inflation fear, geopolitical fear, or dollar weakness? Each has different implications",
+      "What if this commodity move is already exhausted? Mean reversion is the most profitable commodity trade"
+    ],
+    behavioral_deltas: [
+      "Institutional: currency hedging adjustments, commodity allocation rebalance",
+      "Corporate: pricing strategy, sourcing changes, hedging decisions",
+      "Consumer: spending pattern shift when gas/food prices change notably",
+      "Policy: strategic reserve releases, trade policy adjustments"
+    ],
+    historical_cases: [
+      "Oil spike 2022: Energy +40% (sustained). But consumer discretionary -15% (spending drag). Both sides mattered.",
+      "DXY surge 2022 (DXY 114): US multinationals reported massive FX headwinds. MSFT guided -$600M quarterly. But domestics (homebuilders) unaffected.",
+      "Gold 2020: +25% as real rates went deeply negative. Correlated with TIPS yields more than geopolitics. Miners (GDX) +35%."
+    ]
   },
 
   economic: {
     description: "Economic indicators → Fed expectations, sector rotation, risk appetite",
-    chains: [{
-      name: "Macro Data → Fed → Sector Rotation",
-      chain: "Economic data → changes Fed expectations → discount rate shift → sector repricing",
-      theme_sectors: ["Rate-sensitive", "Growth vs Value", "Cyclicals vs Defensives"],
-      example_tickers: ["QQQ", "TLT", "XLF", "XLU", "XLE"],
-      time_horizon: "Immediate to quarters",
-      typical_magnitude: "10Y +100bp → QQQ ~-8 to -12%"
-    }],
-    consensus_traps: ["Single data point ≠ trend. 3-month annualized is more meaningful than single month"],
-    inversion_prompts: ["What if this data is revised? What if the market is overreacting to one number?"],
-    behavioral_deltas: ["Institutional: rapid rebalancing. Fed: potential policy shift. Consumer: confidence impact"],
-    historical_cases: ["CPI surprise Aug 2022: Market -4% in one day. But 3 months later, S&P was +10% as inflation peaked."]
+    chains: [
+      {
+        name: "Macro Data → Fed → Sector Rotation",
+        chain: "Economic data → changes Fed expectations → discount rate shift → sector repricing",
+        theme_sectors: ["Rate-sensitive", "Growth vs Value", "Cyclicals vs Defensives"],
+        example_tickers: ["QQQ", "TLT", "XLF", "XLU", "XLE"],
+        time_horizon: "Immediate to quarters",
+        typical_magnitude: "10Y +100bp → QQQ ~-8 to -12%"
+      },
+      {
+        name: "Labor Market → Consumer Confidence → Spending",
+        chain: "Employment data → consumer confidence/income → spending patterns → retail/services/housing",
+        theme_sectors: ["Consumer Discretionary", "Housing", "Auto", "Restaurants"],
+        example_tickers: ["XRT", "XHB", "TSLA", "MCD", "CMG"],
+        time_horizon: "1-3 months lag from employment to spending data",
+        typical_magnitude: "Unemployment +1% → consumer discretionary typically -5 to -8%"
+      },
+      {
+        name: "Recession Signal → Defensive Rotation → Reversion",
+        chain: "Recession indicator triggers → flight to defensives → if recession doesn't materialize → violent snap-back to cyclicals",
+        theme_sectors: ["Utilities vs Cyclicals", "Healthcare vs Tech", "Staples vs Discretionary"],
+        example_tickers: ["XLU", "XLP", "XLY", "XLI"],
+        time_horizon: "False alarm: reversion in 2-4 months. Real recession: 12-18 months of defensive outperformance",
+        typical_magnitude: "2019 yield curve inversion: everyone rotated to defensives, then cyclicals outperformed by 15% in following 6 months"
+      }
+    ],
+    consensus_traps: [
+      "Single data point ≠ trend. 3-month annualized is more meaningful than single month",
+      "Market reacts to SURPRISE vs expectations, not absolute level. CPI at 3% is bullish if expected 3.5%, bearish if expected 2.5%",
+      "Recession indicators have high false positive rates — yield curve inverted in 2019, recession didn't come until 2020 (and even that was exogenous)"
+    ],
+    inversion_prompts: [
+      "What if this data is revised? What if the market is overreacting to one number?",
+      "Bad economic data → Fed cuts → actually good for stocks? (Bad is good regime)",
+      "If everyone is positioned for recession, what happens when it doesn't come? (2023 was exactly this)"
+    ],
+    behavioral_deltas: [
+      "Institutional: rapid rebalancing, duration adjustment, sector rotation",
+      "Fed: potential policy shift (the most important behavioral delta in economics)",
+      "Consumer: confidence-driven spending changes with 1-3 month lag",
+      "Corporate: hiring/capex plans adjust with 1-2 quarter lag"
+    ],
+    historical_cases: [
+      "CPI surprise Aug 2022: Market -4% in one day. But 3 months later, S&P was +10% as inflation peaked.",
+      "2023 'recession that never came': Yield curve inverted for record duration. Defensives underperformed cyclicals by 15%. Consensus was wrong.",
+      "NFP surprise Mar 2023: +311K vs +225K expected. Market initially sold off (higher for longer), then rallied as 'strong economy' narrative won."
+    ]
   },
 };
 

@@ -67,6 +67,19 @@ Call `insight_engine` tool. Then apply these thinking paths:
 - Generate 5-6 candidates. Quantity here, quality in next step.
 - **At least 1 candidate MUST come from the inverse/contrarian direction.** This is mandatory.
 
+### Step 2.5: Enrich with Real-Time Data (When Available)
+
+The historical cases and data provided by `insight_engine` are **starting points, not final sources**. When you have access to web search tools:
+
+1. **Verify** the tool's built-in historical data — numbers may be approximate or outdated.
+2. **Supplement** with more recent examples (especially for events in 2025-2026).
+3. **Check current data** for verification signals (e.g., current CDC ILI data, latest AAII sentiment survey, recent sector performance).
+4. **Find counter-examples** the tool may have missed — counter-examples are MORE important than supporting evidence.
+
+If no web search tool is available, proceed with the built-in data but add a note: "以上历史数据来自工具内置库，建议自行验证最新情况。"
+
+---
+
 ### Step 3: Validate (The Critical Engine)
 
 Call `reality_check` tool. Then apply these gates:
@@ -217,3 +230,81 @@ Structure each surviving connection using **Setup → Flip → Land**:
 ---
 
 💬 以上是两个思考方向，不是投资建议。药企这个"显而易见"的角度我故意没展开——因为人人都想得到的，通常已经没有信息增量。你觉得哪条逻辑有问题？
+
+---
+
+## WORKED EXAMPLE 2 — Low-Signal Input (诚实说"没什么")
+
+**User**: "周一了，情绪低迷"
+
+**Output**:
+
+🔗 **Monday Effect：学术界研究了 100 年的"周一诅咒"——然后它就消失了**
+
+你的感觉不是错觉。金融学术界从 1930 年代就在研究 Monday Effect：周一股市回报率显著低于其他交易日。但有意思的是，这个效应在被广泛发表后逐渐减弱——当所有人都知道周一会跌，就有人提前套利，效应被磨掉了。
+
+📚 历史印证: 1928-1982 年间，S&P 500 周一平均回报 -0.13%（统计显著）。2003 年至今，周一平均回报 +0.01%，统计上已不显著。但 Birru (2018, JFE) 发现效应在散户主导的小盘股中仍然存在。
+
+👀 验证信号: AAII 散户情绪调查 + 小盘股（IWM）周一 vs 其他日回报差异。
+
+⚠️ 最脆弱环节: Monday Effect 即使存在，年化贡献可能只有 1-2%，交易成本就吃掉了。
+
+🟡 中共识
+
+---
+
+💬 说实话，单纯"周一情绪低迷"在金融层面的信息量很低。上面这个角度更多是一个有趣的知识点，不是可执行的思路。如果你今天没有具体的观察或信息，最好的操作可能就是不操作。
+
+---
+
+## WORKED EXAMPLE 3 — Novel/Political Event (名人争议事件)
+
+**User**: "马斯克说给 Epstein 案的人付律师费"
+
+**Output**:
+
+✅ 消息已确认。
+
+🔗 **争议不是风险，争议是注意力货币——但这次变量不同**
+
+第一反应是"TSLA 要跌"。但 Musk 的争议言行和 TSLA 股价之间的关系，远比直觉复杂。纯言论争议（如 2023 年反 ADL 言论）通常 1-3 个月内回归基本面。真正改变定价的是：争议是否消耗实际资源（如 2022 年收购 Twitter），或触发监管介入（如 2018 年 "funding secured"）。
+
+类似机制在别的领域出现过：2018 年 Nike 签 Kaepernick 拍广告，舆论炸了，股价两天跌 3%——三个月后创新高。品牌极化反而强化了核心客群忠诚度。
+
+📚 历史印证: Nike-Kaepernick 2018：短期 -3.2%，90 天后 +18%。核心客群（18-34 岁）购买意愿反增 +10%（Morning Consult 调查）。但 Nike 卖鞋，TSLA 卖车——决策链长度完全不同，极化传导效率未必可比。
+
+👀 验证信号: 关注 DOJ/SEC 是否发表任何声明。如果没有 → 大概率是噪音。如果有 → 尾部风险升级。
+
+⚠️ 最脆弱环节: Nike 的争议是"支持社会正义"，Musk 这次是介入刑事丑闻——公众道德判断截然不同，极化方向和烈度可能不可比。这更多是一个机制类比，不是直接先例。
+
+🟡 中共识
+
+---
+
+💬 这类名人争议事件的可预测性极低。以上角度来自机制类比（不是直接先例），置信度有限。如果你不持有相关标的，这件事大概率跟你没关系。
+
+---
+
+## WORKED EXAMPLE 4 — Mixed Signals (多信号拆分)
+
+**User**: "放假了，四处都是人，我不想出门"
+
+**Output**:
+
+🔗 **不出门的人才是被忽视的消费力**
+
+放假 + 人多，大多数人想到的是旅游消费爆发——航空、酒店、景区。这是对的，但也是 🔴 高共识：假日经济年年发生，市场早已建模。
+
+更有意思的角度是你说的"不想出门"。假期里选择宅家的人群不是消费力为零——他们只是把消费从线下转到了线上：外卖、流媒体、电商、游戏。当线下过于拥挤导致体验变差，"宅经济"反而获得一批主动选择的用户，而不只是被动用户。
+
+📚 历史印证: 2024 年春节黄金周，线下旅游恢复到 2019 年 119% 的人次，但人均消费只恢复到 96%。与此同时，美团外卖假期订单量同比 +15%，抖音直播购物 GMV 创假期纪录。线下"量增价减"，线上反而吃到了溢出。
+
+👀 验证信号: 假期结束后对比：OTA 平台（BKNG/ABNB）的客单价 vs 外卖/电商平台的假期订单增速。
+
+⚠️ 最脆弱环节: 这个逻辑在中国市场更明显（外卖/直播电商发达），映射到美股时传导链变长——需要找到在美国同样受益于"宅假期"的标的，传导不如国内直接。
+
+🟢 低共识
+
+---
+
+💬 旅游板块的假日效应人人都看得到。如果你想找不一样的角度，不妨关注"假期里不出门的人在做什么"。这个方向可能有意思，也可能只是一个思维练习。

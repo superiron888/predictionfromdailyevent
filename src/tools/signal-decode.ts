@@ -120,29 +120,35 @@ function extractSignals(input: string): string[] {
 }
 
 // ── Bridge Types for Connection Generation ──
+// Aligned with behavioral-propagation.md and system-prompt.md
 const BRIDGE_TYPES = `
 ## 6 Bridge Types for Connection Generation
 
-### 1. Behavioral Bridge (4 actor types)
-- **Consumer**: spending, travel, time allocation, attention, channel
-- **Corporate**: hiring, capex, inventory, risk posture, strategy
-- **Institutional**: allocation, risk limits, rotation, compliance
-- **Policy**: legislation, enforcement, spending, emergency response
+### 1. Behavioral Bridge (4 actor types — the CORE bridge)
+- **Consumer**: spending, travel, time allocation, attention, channel choice (感冒→居家→刷手机→流媒体DAU↑)
+- **Corporate**: hiring, capex, inventory, risk posture, M&A appetite, strategy pivot (关税→supply chain relocation→东南亚capex↑)
+- **Institutional**: asset allocation, risk limits, sector rotation, compliance adjustment (地缘冲突→EM exposure reduction→US repatriation)
+- **Policy/Regulatory**: legislation, enforcement, spending, rate decisions, emergency response (流感大爆发→CDC升级→公共卫生拨款↑)
+
+Push each behavioral change to 2nd and 3rd order effects. Max 3 levels. Each needs a "because."
 
 ### 2. Resource Bridge
-Event shifts supply/demand of a resource → who depends on it?
+Event shifts supply/demand of a resource → who depends on it? Who is the alternative supplier?
 
 ### 3. Narrative/Sentiment Bridge
-Event changes public/market mood → mood drives what behavior?
+Event changes public/market mood → mood drives what behavior? When sentiment overshoots, where's the reversion?
 
 ### 4. Substitution Bridge
-A weakened → who provides A's FUNCTION (not just form)?
+A weakened → who provides A's FUNCTION (not just form)? A strengthened → whose substitute value drops?
 
 ### 5. Scale Shift Bridge
-Micro observation → macro trend → market implication (or reverse)
+Micro observation → macro trend → market implication (or reverse: macro headline → micro verification point)
 
-### 6. Temporal Bridge
-Immediate (priced in) → Lagged (1-3wk sweet spot) → Delayed (1-3mo) → Reversion (3-6mo)
+### 6. Temporal Bridge (Time Arbitrage)
+- Immediate (0-3 days): already priced in → consensus zone, no edge
+- Lagged (1-3 weeks): happening but unconfirmed in data → **SWEET SPOT**
+- Delayed (1-3 months): requires patience → underappreciated
+- Reversion (3-6 months): current trend reverses → contrarian opportunity
 `;
 
 export function registerSignalDecode(server: McpServer): void {

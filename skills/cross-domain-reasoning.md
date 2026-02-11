@@ -93,6 +93,34 @@ Semiconductor cycle: ~3-4 years. Inventory/revenue >1.5x = excess, <0.8x = short
 
 ---
 
+## Critical Quantitative Anchors (Key Numbers to Know)
+
+### Geopolitical Supply Shares
+- Russia: ~12% global oil exports, ~17% natural gas, ~40% palladium, ~18% wheat
+- TSMC (Taiwan): >80% of advanced process chips (7nm and below)
+- OPEC+: ~40% of global oil capacity. Saudi swing capacity ~2-3M bpd
+- Strait of Hormuz: ~20% of global oil trade
+- China: ~60% global rare earth processing, ~80% lithium battery capacity
+
+### Market Behavior Benchmarks
+- S&P 500 Forward PE: ~18-20x neutral, >22x expensive, <16x cheap
+- VIX: avg ~20. >30 = panic, >40 = extreme, <12 = overconfidence
+- 10Y yield +100bp → QQQ historically -8 to -12%
+- Geopolitical VIX spike: typically +5-15 points, 80% revert in 2-4 weeks
+
+### Macro Thresholds
+- Core PCE >3% = Fed won't cut, >4% = may hike, <2.5% = cut window opens
+- Unemployment <4% = tight labor → wage inflation, >4.5% = recession warning
+- ISM PMI: 50 = expansion/contraction line, <47 = high recession probability
+- CDC ILI baseline: ~2.5%, >3.5% = strong flu season
+
+### Supply Chain Signals
+- Semiconductor inventory cycle: ~3-4 years. Inv/rev >1.5x = excess, <0.8x = shortage
+- TSMC utilization >95% = strong pricing, <80% = downturn
+- Container freight (SCFI): >50% above 5-year average = supply chain stress
+
+---
+
 ## Cross-Validation Rules
 - Same conclusion from 2 disciplines → confidence boost
 - Historical precedent exists → confidence boost
