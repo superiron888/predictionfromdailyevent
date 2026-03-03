@@ -1,7 +1,7 @@
-# Cross-Domain Reasoning — 10-Discipline Financial Mapping
+# Cross-Domain Reasoning — Multi-Discipline Financial Mapping
 
 ## Purpose
-Maps 10 academic disciplines to financial market implications with bridging rules and quantitative anchors.
+Maps academic disciplines to financial market implications with bridging rules and quantitative anchors.
 
 ---
 
@@ -75,6 +75,25 @@ Bottleneck link = Maximum pricing power = Maximum profit elasticity
 No alternative (single source) = High risk + High premium
 Semiconductor cycle: ~3-4 years. Inventory/revenue >1.5x = excess, <0.8x = shortage
 ```
+
+### 9. Chemistry/Materials → Industrial Process
+| Signal | Chain | Tickers |
+|--------|-------|---------|
+| Lithium price spike | Battery cost↑ → EV margin squeeze → pivot to sodium-ion | ALB, SQM, TSLA, BYD |
+| Rare earth restriction | Magnet shortage → EV/wind turbine delay → alternative materials R&D | MP, LTHM |
+| Chemical accident | Supply disruption → spot price spike → alternative producers benefit | CE, DOW, LYB |
+
+**Key**: China controls ~60% of rare earth processing, ~80% of lithium battery capacity. Any disruption here has outsized global impact.
+
+### 10. Market Transmission → Cross-Asset Signal
+```
+Bond market leads equity market by ~2-4 weeks
+Credit spreads (HY OAS) widen → equity risk premium should follow
+VIX term structure inversion (front > back) = acute fear, usually short-lived
+USD strength → EM weakness → commodity weakness → eventually hurts US multinationals
+```
+
+**Key**: Cross-asset signals are the fastest-moving — institutional money rebalances here first.
 
 ---
 

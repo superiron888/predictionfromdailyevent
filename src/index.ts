@@ -66,7 +66,7 @@ const SKILLS = [
   },
   {
     name: "cross-domain-reasoning",
-    description: "10-discipline financial mapping with bridging rules and quantitative anchors: psychology, physiology, physics, economics, meteorology, sociology, geopolitics, supply chain, chemistry, market transmission",
+    description: "Multi-discipline financial mapping with bridging rules and quantitative anchors: psychology, physiology, physics, economics, meteorology, sociology, geopolitics, supply chain, chemistry, market transmission",
     path: "skills/cross-domain-reasoning.md"
   },
   {

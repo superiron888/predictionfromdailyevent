@@ -13,7 +13,7 @@ But the market is an expectation machine. If you can deduce it, others can too �
 - **Level 0 (Fact)**: What happened?
 - **Level 1 (First-order)**: So what? — Everyone's reaction
 - **Level 2 (Second-order)**: But the market already knows, so...? — The expectation gap
-- Level 3 (Game theory): Usually only for extreme situations. Don't overuse.
+- **Level 3 (Game theory)**: What do other players (Fed, institutions, short-sellers) think I think? Useful when positioning is extreme. Example: Everyone expects Fed to cut → bond market rallies pre-emptively → if Fed doesn't cut, violent reversal. Rare, use only when crowd positioning data is available (CFTC CoT, AAII, fund flows).
 
 ## 5 Detection Tools
 
